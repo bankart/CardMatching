@@ -14,6 +14,7 @@
 		E3B724FF20720CA70048F3B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B724FE20720CA70048F3B1 /* Assets.xcassets */; };
 		E3B7250220720CA70048F3B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3B7250020720CA70048F3B1 /* LaunchScreen.storyboard */; };
 		E3B7250D20720CA80048F3B1 /* CardMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7250C20720CA80048F3B1 /* CardMatchingTests.swift */; };
+		E3B725182072132B0048F3B1 /* Concentration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B725172072132B0048F3B1 /* Concentration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		E3B7250820720CA80048F3B1 /* CardMatchingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CardMatchingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B7250C20720CA80048F3B1 /* CardMatchingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardMatchingTests.swift; sourceTree = "<group>"; };
 		E3B7250E20720CA80048F3B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E3B725172072132B0048F3B1 /* Concentration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concentration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				E3B7250020720CA70048F3B1 /* LaunchScreen.storyboard */,
 				E3B7250320720CA70048F3B1 /* Info.plist */,
 				E3B724FB20720CA20048F3B1 /* CardMatching.xcdatamodeld */,
+				E3B725172072132B0048F3B1 /* Concentration.swift */,
 			);
 			path = CardMatching;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3B724F720720CA20048F3B1 /* ViewController.swift in Sources */,
+				E3B725182072132B0048F3B1 /* Concentration.swift in Sources */,
 				E3B724F520720CA20048F3B1 /* AppDelegate.swift in Sources */,
 				E3B724FD20720CA20048F3B1 /* CardMatching.xcdatamodeld in Sources */,
 			);
