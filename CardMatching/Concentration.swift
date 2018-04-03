@@ -5,13 +5,20 @@
 //  Created by taehoon lee on 2018. 4. 2..
 //  Copyright © 2018년 taehoon lee. All rights reserved.
 //
+//  release note link: https://developer.apple.com/library/content/releasenotes/DeveloperTools/RN-Xcode/Chapters/Introduction.html
+//  > Hashable 채택하면 enum, struct 인 경우에 변수들은 hashValue 로 동작하고, == 함수는 자동으로 구현된다.
+//    구현하지 않아도 에러가 나지 않고 정상동작해서 확인해보니 이런 신세계가!!! [2018/4/3]
+//
 
 import Foundation
 
-struct Card {
+struct Card: Hashable {
     var isFaceUp: Bool = false
     var isMatched: Bool = false
-    var identifier: Int
+    private var identifier: Int
+    var hashValue: Int {
+        return identifier
+    }
     
     private static var uniqueIdentifier: Int = -1
     static func getUniqueIdentifier() -> Int {
@@ -22,9 +29,13 @@ struct Card {
     init() {
         self.identifier = Card.getUniqueIdentifier()
     }
+    
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.hashValue == rhs.hashValue
+    }
 }
 
-class Concentration {
+struct Concentration {
     private var touchedCardIndex: Int? {
         get {
             var foundIndex: Int?
@@ -54,7 +65,7 @@ class Concentration {
         reset()
     }
     
-    func reset() {
+    mutating func reset() {
         cards = reset(self.numberOfPairsOfCards)
     }
     
@@ -81,11 +92,11 @@ class Concentration {
         return result
     }
     
-    func chooseCard(at index: Int) {
+    mutating func chooseCard(at index: Int) {
         assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not int the cards")
         if !cards[index].isMatched {
             if let matchIndex = touchedCardIndex, matchIndex != index {
-                if cards[matchIndex].identifier == cards[index].identifier {
+                if cards[matchIndex] == cards[index] {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                     print("matched!!!")

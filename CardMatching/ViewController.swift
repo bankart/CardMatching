@@ -13,16 +13,15 @@
 import UIKit
 
 class ViewController: UIViewController {
-//    private var queue: DispatchQueue?
-//    private var animationActivated: Bool = false
-//    private let targetBgColor: UIColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+
     private var finished: Bool = false
     
     
-    private var emojies = ["🧙‍♂️", "🧛‍♂️", "🧟‍♀️", "👻", "😈", "🎃", "💀", "👽", "🧞‍♂️", "🧜‍♀️", "💃", "👯‍♂️", "🐒"]
-    private var emojiesForRandom: [String]?
+//    private var emojis = ["🧙‍♂️", "🧛‍♂️", "🧟‍♀️", "👻", "😈", "🎃", "💀", "👽", "🧞‍♂️", "🧜‍♀️", "💃", "👯‍♂️", "🐒"]
+    private var emojis = "🧙‍♂️🧛‍♂️🧟‍♀️👻😈🎃💀👽🧞‍♂️🧜‍♀️💃👯‍♂️🐒"
+    private var emojisForRandom: String?
     private lazy var game: Concentration = {
-        // numberOfPairsOfCards 가 UI 와 강하게 결합한 프로퍼티이기 때문에 game 프로퍼티는 private 이 된다.
+        // numberOfPairsOfCards 가 UI 와 강하게 결합한 프로퍼티이기 때문에 game 프로퍼티는 private 이 되는게 맞다.
         return Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
     }()
     
@@ -34,22 +33,37 @@ class ViewController: UIViewController {
     // ViewController 인스턴스에 영향을 주는 프로퍼티이므로 인스턴스 내부에서만 set 할 수 있어야 한다.
     private(set) var flipCount: Int = 0 {
         didSet {
-            print("flipCount: \(flipCount), numberOfPairsOfCards: \(numberOfPairsOfCards)")
-            if flipCount >= numberOfPairsOfCards {
-                restartButton.setTitle("Restart!!", for: .normal)
-                restartButton.isUserInteractionEnabled = true
-                // delay 시간 동안 self 가 nil 될 수 있으므로 [weak self] 처리 해준다.
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) { [weak self] in
-                    self?.finished = true
-                    self?.reloadCards()
-                }
-            } else {
-                restartButton.setTitle("Card Matched: \(flipCount)", for: .normal)
-            }
+            updateRestartButton()
         }
     }
     
-    @IBOutlet private weak var restartButton: UIButton!
+    @IBOutlet private weak var restartButton: UIButton! {
+        didSet {
+            updateRestartButton()
+        }
+    }
+    
+    private func updateRestartButton() {
+        let attributes: [NSAttributedStringKey: Any] = [
+            .strokeWidth: 5.0,
+            .strokeColor: #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+        ]
+        
+        if flipCount >= numberOfPairsOfCards {
+            let attributedString = NSAttributedString(string:"Restart!", attributes: attributes)
+            restartButton.setAttributedTitle(attributedString, for: .normal)
+            restartButton.isUserInteractionEnabled = true
+            // delay 시간 동안 self 가 nil 될 수 있으므로 [weak self] 처리 해준다.
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) { [weak self] in
+                self?.finished = true
+                self?.reloadCards()
+            }
+        } else {
+            let attributedString = NSAttributedString(string:"Card Matched: \(flipCount)", attributes: attributes)
+            restartButton.setAttributedTitle(attributedString, for: .normal)
+        }
+    }
+    
     @IBOutlet private var cardButtons: [UIButton]!
     
     override func viewDidLoad() {
@@ -74,7 +88,7 @@ class ViewController: UIViewController {
         print("let's play!!!")
         flipCount = 0
         finished = false
-        emojiesForRandom = emojies
+        emojisForRandom = emojis
         game.reset()
         reloadCards()
         restartButton.isUserInteractionEnabled = false
@@ -107,14 +121,15 @@ class ViewController: UIViewController {
         UIView.commitAnimations()
     }
     
-    private var emojiDic = [Int: String]()
+    private var emojiDic = [Card: String]()
     private func emoji(for card: Card) -> String {
-        if emojiDic[card.identifier] == nil, emojiesForRandom!.count > 0 {
+        if emojiDic[card] == nil, emojisForRandom!.count > 0 {
 //            // 랜덤 이모지 뽑아내는 코드는 컨버팅이 많고 불편하다. 이런 부분은 extension 으로 뽑아낸다.
 //            let randomIndex = Int(arc4random_uniform(UInt32(emojiesForRandom!.count)))
-            emojiDic[card.identifier] = emojiesForRandom!.remove(at: emojiesForRandom!.count.arc4random)
+            let randomIndex = emojisForRandom!.index(emojisForRandom!.startIndex, offsetBy: emojisForRandom!.count.arc4random)
+            emojiDic[card] = String(emojisForRandom!.remove(at: randomIndex))
         }
-        return emojiDic[card.identifier] ?? "??"
+        return emojiDic[card] ?? "??"
     }
     
 }
