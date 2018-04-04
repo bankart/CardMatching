@@ -38,17 +38,22 @@ struct Card: Hashable {
 struct Concentration {
     private var touchedCardIndex: Int? {
         get {
-            var foundIndex: Int?
-            for index in cards.indices {
-                if cards[index].isFaceUp {
-                    if foundIndex == nil {
-                        foundIndex = index
-                    } else {
-                        return nil
-                    }
-                }
-            }
-            return foundIndex
+            return cards.indices.filter { cards[$0].isFaceUp }.onAndOnly
+            
+//            let faceUpCardIndices = cards.indices.filter { cards[$0].isFaceUp }
+//            return faceUpCardIndices.last
+            
+//            var foundIndex: Int?
+//            for index in cards.indices {
+//                if cards[index].isFaceUp {
+//                    if foundIndex == nil {
+//                        foundIndex = index
+//                    } else {
+//                        return nil
+//                    }
+//                }
+//            }
+//            return foundIndex
         }
         set {
             for index in cards.indices {
@@ -108,3 +113,11 @@ struct Concentration {
         }
     }
 }
+
+
+extension Collection {
+    var onAndOnly: Element? {
+        return count == 1 ? first : nil
+    }
+}
+
